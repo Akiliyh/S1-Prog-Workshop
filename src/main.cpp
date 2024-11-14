@@ -42,6 +42,32 @@ void negative(sil::Image& image)
     }
 }
 
+void mirror(sil::Image& image)
+{
+    sil::Image newImage{image};
+    for (int x{0}; x < image.width(); ++x)
+    {
+        for (int y{0}; y < image.height(); ++y)
+        {
+            image.pixel(x, y) = newImage.pixel(image.width()-x-1, y);
+        }
+    }
+}
+
+void to90Degrees(sil::Image& image)
+{
+    sil::Image newImage{image.height(), image.width()}; /* change dimensions */
+    for (int x{0}; x < newImage.width(); ++x)
+    {
+        for (int y{0}; y < newImage.height(); ++y)
+        {
+
+            newImage.pixel(x, y) = image.pixel(y,newImage.width()-x-1);
+        }
+    }
+    newImage.save("output/90degrees.png"); 
+}
+
 int main()
 {
     {
@@ -63,5 +89,14 @@ int main()
         sil::Image image{"images/logo.png"};
         negative(image); 
         image.save("output/negative.png"); 
+    }
+    {
+        sil::Image image{"images/logo.png"};
+        mirror(image); 
+        image.save("output/mirror.png"); 
+    }
+    {
+        sil::Image image{"images/logo.png"};
+        to90Degrees(image); 
     }
 }
