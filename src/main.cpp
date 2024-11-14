@@ -54,6 +54,28 @@ void mirror(sil::Image& image)
     }
 }
 
+void rgbSplit(sil::Image& image)
+{
+    sil::Image newImage{image};
+    int newXRed {};
+    int newXGreen {};
+    int newXBlue {};
+    int gap {30};
+    for (int x{0}; x < newImage.width(); ++x)
+    {
+        for (int y{0}; y < newImage.height(); ++y)
+        {
+            if (x+gap < newImage.width()) newXRed = x + gap;
+            newXGreen = x;
+            if (x-gap < newImage.width() && x-gap > 0) newXBlue = x - gap;
+            newImage.pixel(newXRed, y).r = image.pixel(x,y).r;
+            newImage.pixel(newXGreen, y).g = image.pixel(x,y).g;
+            newImage.pixel(newXBlue, y).b = image.pixel(x,y).b;
+        }
+    }
+    image = newImage; 
+}
+
 void to90Degrees(sil::Image& image)
 {
     sil::Image newImage{image.height(), image.width()}; /* change dimensions */
@@ -65,7 +87,7 @@ void to90Degrees(sil::Image& image)
             newImage.pixel(x, y) = image.pixel(y,newImage.width()-x-1);
         }
     }
-    newImage.save("output/90degrees.png"); 
+    image = newImage;  
 }
 
 int main()
@@ -97,6 +119,12 @@ int main()
     }
     {
         sil::Image image{"images/logo.png"};
+        rgbSplit(image); 
+        image.save("output/rgb_split.png"); 
+    }
+    {
+        sil::Image image{"images/logo.png"};
         to90Degrees(image); 
+        image.save("output/90degrees.png"); 
     }
 }
