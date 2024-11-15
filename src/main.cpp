@@ -42,6 +42,19 @@ void negative(sil::Image& image)
     }
 }
 
+void gradient()
+{
+    sil::Image image{300, 200};
+    for (int x{0}; x < image.width(); ++x)
+    {
+        for (int y{0}; y < image.height(); ++y)
+        {
+            image.pixel(x, y) = glm::vec3{static_cast<float>(x) / static_cast<float>(image.width() - 1)};
+        }
+    }
+    image.save("output/gradient.png");
+}
+
 void mirror(sil::Image& image)
 {
     sil::Image newImage{image};
@@ -126,5 +139,8 @@ int main()
         sil::Image image{"images/logo.png"};
         to90Degrees(image); 
         image.save("output/90degrees.png"); 
+    }
+    {
+        gradient();  
     }
 }
