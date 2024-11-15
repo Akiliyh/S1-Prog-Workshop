@@ -1,4 +1,5 @@
 #include <sil/sil.hpp>
+#include <random.hpp>
 #include <iostream>
 
 void keep_green_only(sil::Image& image) 
@@ -103,9 +104,17 @@ void to90Degrees(sil::Image& image)
     image = newImage;  
 }
 
+void addNoise(sil::Image& image)
+{
+    for (glm::vec3& color : image.pixels())
+    {
+        if (true_with_probability(0.3f)) color = glm::vec3{random_float(0.f,1.f), random_float(0.f,1.f), random_float(0.f,1.f)};
+    }
+}
+
 int main()
 {
-    {
+    /*{
         sil::Image image{"images/logo.png"};
         keep_green_only(image); 
         image.save("output/keep_green_only.png"); 
@@ -142,5 +151,11 @@ int main()
     }
     {
         gradient();  
+    }*/
+
+    {
+        sil::Image image{"images/logo.png"};
+        addNoise(image); 
+        image.save("output/noise.png"); 
     }
 }
