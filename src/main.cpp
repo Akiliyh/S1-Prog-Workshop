@@ -1,6 +1,7 @@
 #include <sil/sil.hpp>
 #include <random.hpp>
 #include <iostream>
+#include <math.h>
 
 void keep_green_only(sil::Image& image) 
 {
@@ -112,6 +113,21 @@ void addNoise(sil::Image& image)
     }
 }
 
+void changeLuminosity(sil::Image& image, float lumino)
+{
+    for (glm::vec3& color : image.pixels())
+    {
+        color.r = pow(color.r, lumino); 
+        color.b = pow(color.b, lumino);
+        color.g = pow(color.g, lumino);
+        /*color.g = pow(color.g, 1/2); 
+        color.b = pow(color.b, 1/2); */
+        /*color.r = color.r + exp (color.r);
+        color.g = color.g + exp (color.g);
+        color.b = color.b + exp (color.b);*/
+    }
+}
+
 int main()
 {
     /*{
@@ -157,5 +173,11 @@ int main()
         sil::Image image{"images/logo.png"};
         addNoise(image); 
         image.save("output/noise.png"); 
+    }
+
+    {
+        sil::Image image{"images/photo.jpg"};
+        changeLuminosity(image, 0.5); /* change value here to change luminosity */
+        image.save("output/changed-luminosity.png"); 
     }
 }
